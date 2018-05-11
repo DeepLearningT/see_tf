@@ -173,7 +173,7 @@ def get_trainer(net, updater, log_dir, print_fields, extra_extensions=(), epochs
 
 
 def add_default_arguments(parser):
-    parser.add_argument("log_dir", help='directory where generated models and logs shall be stored')
+    parser.add_argument("--log_dir", help='directory where generated models and logs shall be stored')
     parser.add_argument('-b', '--batch-size', dest='batch_size', type=int, required=True,
                         help="Number of images per training batch")
     parser.add_argument('-g', '--gpus', type=int, nargs="*", default=[], help="Ids of GPU to use [default: (use cpu)]")

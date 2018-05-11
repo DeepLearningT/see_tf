@@ -25,7 +25,7 @@ from utils.train_utils import add_default_arguments, get_fast_evaluator, get_tra
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Tool to train a text detection network based on Spatial Transformers")
-    parser.add_argument('dataset_specification',
+    parser.add_argument('--dataset_specification',
                         help='path to json file that contains all datasets to use in a list of dicts')
     parser.add_argument("--timesteps", type=int, default=3, help='max number of words/textlines to find')
     parser.add_argument("--blank-label", type=int, help="blank label to use during training")
