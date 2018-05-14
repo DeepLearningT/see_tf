@@ -124,10 +124,12 @@ class SVHNDatasetCreator:
                 image_info = random.choice(image_information)
                 file_name = image_info['filename']
                 bboxes = image_info['boxes']
+                # 读取的lable只是数字值 减1转为数字序号
                 labels = [int(box['label']) - 1 for box in bboxes]
                 if len(labels) > self.max_label_length:
                     continue
 
+                # 每张图对应的label长度不够max_label_length，用10补齐
                 all_labels.append(labels + [self.label_pad_value] * (self.max_label_length - len(labels)))
 
                 with Image.open(os.path.join(self.image_dir, file_name)) as image:
@@ -175,6 +177,14 @@ class SVHNDatasetCreator:
             for idx, labels in enumerate(all_labels_concatenated):
                 writer.writerow([os.path.join(os.path.abspath(self.destination_image_dir), '{}.png'.format(idx))] + labels)
 
+'''
+main传参
+/data/home/deeplearn/dataset/SVHN/Format1/train
+/data/home/deeplearn/dataset/SVHN/Format1/train/digitStruct.json
+/data/home/deeplearn/dataset/SVHN/Format1/train-destination
+30000
+4
+'''
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Tool that creates a four image svhn dataset for training')

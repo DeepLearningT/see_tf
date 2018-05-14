@@ -22,8 +22,8 @@ import optparse
 from json import JSONEncoder
 
 parser = optparse.OptionParser()
-parser.add_option("-f", dest="fin", help="Matlab full number SVHN input file", default="digitStruct.mat")
-parser.add_option("-o", dest="filePrefix", help="name for the json output file", default="digitStruct")
+parser.add_option("-f", dest="fin", help="Matlab full number SVHN input file", default="/data/home/deeplearn/dataset/SVHN/Format1/test/digitStruct.mat")
+parser.add_option("-o", dest="filePrefix", help="name for the json output file", default="/data/home/deeplearn/dataset/SVHN/Format1/test/digitStruct")
 (options,args)= parser.parse_args()
 
 fin = options.fin

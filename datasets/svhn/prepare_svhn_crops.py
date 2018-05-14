@@ -40,15 +40,22 @@ def enlarge_bbox(bbox, percentage=0.3):
     )
 
 
+'''
+# main
+
+'''
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='tool that takes user defined crops around image regions of svhn data')
-    parser.add_argument('svhn_json', help='path to svhn gt file')
-    parser.add_argument('crop_size', type=int, help='crop size in pixels for each text region')
-    parser.add_argument('dest_dir', help='destination dir for cropped images')
-    parser.add_argument('stage_name', help='name of stage (e.g. train, or test)')
+    parser.add_argument('svhn_json', type=str, default="/data/home/deeplearn/dataset/SVHN/Format1/train/digitStruct.json", help='path to svhn gt file')
+    parser.add_argument('crop_size', default=64, type=int, help='crop size in pixels for each text region')
+    parser.add_argument('dest_dir',  type=str, default="/data/home/deeplearn/dataset/SVHN/Format1/train_crop", help='destination dir for cropped images')
+    parser.add_argument('stage_name', type=str, default="train", help='name of stage (e.g. train, or test)')
     parser.add_argument('--max-length', type=int, default=5, help='max length of labels [default: 5]')
 
+
     args = parser.parse_args()
+
 
     with open(args.svhn_json) as gt_file:
         gt = json.load(gt_file)
@@ -68,6 +75,7 @@ if __name__ == "__main__":
             left=b['left'],
             width=b['width'],
         ) for b in image_data['boxes']]
+
 
         merged_bbox = merge_bboxes(bboxes)
         new_bbox = enlarge_bbox(merged_bbox)
@@ -94,6 +102,8 @@ if __name__ == "__main__":
             labels.extend(values_to_pad)
         file_info = [file_path] + labels
         filtered_infos.append(file_info)
+
+    print(os.path.join(os.path.dirname(args.dest_dir), "{}.csv".format(args.stage_name)))
 
     # write to csv file
     with open(os.path.join(os.path.dirname(args.dest_dir), "{}.csv".format(args.stage_name)), 'w') as destination:
