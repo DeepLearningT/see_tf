@@ -49,6 +49,16 @@ LD_LIBRARY_PATH=:/usr/local/cuda-9.0/lib64:/usr/local/lib
 
 # 问题1：不支持多GPU训练
   解决办法：
+      cp /opt/Python_3.6.0_gpu/lib/python3.6/site-packages/chainer/training/updaters/multiprocess_parallel_updater.py /opt/Python_3.6.0_gpu/lib/python3.6/site-packages/chainer/training/updaters/multiprocess_parallel_updater.py.bak
+      修改 vi /opt/Python_3.6.0_gpu/lib/python3.6/site-packages/chainer/training/updaters/multiprocess_parallel_updater.py
+      找到报错对应的 param.size地方，对param.data为空做判断
+      列如：
+       if param.data is None:
+            continue
+
+# 问题2：不能进行多轮训练
+  解决办法：
+  
     
 
 '''

@@ -124,6 +124,14 @@ def extract_bbox(bbox, image_size, target_shape, xp):
 
     return top_left, bottom_right
 
+'''
+# main参数
+
+/data/home/deeplearn/tensorflow-workspace/see_tf/logs/2018-05-16T03:17:07.157857_training
+model_400.npz
+/data/home/deeplearn/dataset/SVHN/Format1/test-destination/test/9767.png
+/data/home/deeplearn/tensorflow-workspace/see_tf/datasets/svhn/svhn_char_map.json
+'''
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Tool that loads model and predicts on a given image")
