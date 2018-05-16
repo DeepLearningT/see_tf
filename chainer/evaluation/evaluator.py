@@ -146,7 +146,7 @@ class Evaluator:
         return chr(self.char_map[str(label)])
 
     def prepare_label(self, data):
-        self.xp.array(data, dtype=self.xp.int32)
+        data = self.xp.array(data, dtype=self.xp.int32)
         return data.reshape((-1, self.args.num_labels))
 
     def strip_prediction(self, predictions):
@@ -321,7 +321,7 @@ class SVHNEvaluator(Evaluator):
     @staticmethod
     def get_class_and_module(log_data):
         if not isinstance(log_data, list):
-            module_name = 'svhn.py'
+            module_name = 'train_svhn.py'
             klass_name = log_data
         else:
             klass_name, module_name = log_data

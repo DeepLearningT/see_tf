@@ -23,11 +23,28 @@ from utils.multi_accuracy_classifier import Classifier
 from utils.train_utils import add_default_arguments, get_fast_evaluator, get_trainer, \
     concat_and_pad_examples
 
+'''
+--dataset_specification
+/data/home/deeplearn/dataset/SVHN/Format1/onedataset.json
+--log_dir
+/data/home/deeplearn/tensorflow-workspace/see_tf/logs
+-b
+64
+--char-map
+/data/home/deeplearn/tensorflow-workspace/see_tf/datasets/svhn/svhn_char_map.json
+-g
+1
+2
+3
+--blank-label
+0
+'''
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Tool to train a text detection network based on Spatial Transformers")
     parser.add_argument('--dataset_specification',
                         help='path to json file that contains all datasets to use in a list of dicts')
-    parser.add_argument("--timesteps", type=int, default=3, help='max number of words/textlines to find')
+    parser.add_argument("--timesteps", type=int, default=4, help='max number of words/textlines to find')
     parser.add_argument("--blank-label", type=int, help="blank label to use during training")
     parser.add_argument("--char-map", help="path to char map")
     parser.add_argument("--send-bboxes", action='store_true', default=False,
@@ -124,8 +141,12 @@ if __name__ == "__main__":
                     chainer.serializers.NpzDeserializer(f).load(net)
 
     optimizer = chainer.optimizers.Adam(alpha=args.learning_rate)
+    # setup为优化器提供一个link, Link只是一个能容纳参数的对象 一个最经常使用的links就是linear link。它代表了数学表达式f(x) = Wx + b
     optimizer.setup(model)
+    # 设置权重衰减率
     optimizer.add_hook(chainer.optimizer.WeightDecay(0.0005))
+    # LSTM只能避免RNN的梯度消失（gradient vanishing）；梯度膨胀(gradient explosion)不是个严重的问题，一般靠裁剪后的优化算法即可解决
+    # 比如gradient clipping（如果梯度的范数大于某个给定值，将梯度同比收缩）。
     optimizer.add_hook(chainer.optimizer.GradientClipping(2))
 
     # freeze localization net if user wants to do that

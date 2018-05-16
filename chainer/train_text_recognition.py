@@ -23,11 +23,41 @@ from utils.multi_accuracy_classifier import Classifier
 from utils.train_utils import add_default_arguments, get_fast_evaluator, get_trainer, \
     get_concat_and_pad_examples, get_definition_filepath, get_definition_filename
 
+
+'''
+
+# 环境变量
+LD_LIBRARY_PATH=:/usr/local/cuda-9.0/lib64:/usr/local/lib
+
+# main 参数
+
+/data/home/deeplearn/dataset/SVHN/Format1/onedataset.json
+--log_dir
+/data/home/deeplearn/tensorflow-workspace/see_tf/logs
+-b
+64
+--char-map
+/data/home/deeplearn/tensorflow-workspace/see_tf/datasets/textrec/ctc_char_map.json
+-g
+0
+--blank-label
+0
+-e
+100
+-si
+100
+
+# 问题1：不支持多GPU训练
+  解决办法：
+    
+
+'''
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Tool to train a text detection network based on Spatial Transformers")
-    parser.add_argument('dataset_specification',
+    parser.add_argument('--dataset_specification',
                         help='path to json file that contains all datasets to use in a list of dicts')
-    parser.add_argument("--timesteps", type=int, default=3, help='max number of words/textlines to find')
+    parser.add_argument("--timesteps", type=int, default=4, help='max number of words/textlines to find')
     parser.add_argument("--blank-label", type=int, default=0, help="blank label to use during training")
     parser.add_argument("--char-map", help="path to char map")
     parser.add_argument("--send-bboxes", action='store_true', default=False,

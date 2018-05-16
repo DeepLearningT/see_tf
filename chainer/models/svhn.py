@@ -17,7 +17,9 @@ class SVHNLocalizationNet(Chain):
             self.rs1 = ResnetBlock(32)
             self.rs2 = ResnetBlock(48, filter_increase=True)
             self.rs3 = ResnetBlock(48)
+            # batch为256的输出
             self.lstm = L.LSTM(None, 256)
+            # 输入256维 输出6维 （输出6维是仿射变换矩阵 floc）
             self.transform_2 = L.Linear(256, 6)
 
         # initialize transform
@@ -53,13 +55,14 @@ class SVHNLocalizationNet(Chain):
         h = F.average_pooling_2d(h, 5, stride=2)
 
         localizations = []
-
+        # 预测产出N个二维仿射转换矩阵A
         with cuda.get_device_from_array(h.data):
             for _ in range(self.num_timesteps):
                 in_feature = h
                 lstm_prediction = F.relu(self.lstm(in_feature))
                 transformed = self.transform_2(lstm_prediction)
                 transformed = F.reshape(transformed, (-1, 2, 3))
+                # rotation_dropout 旋转dropout 防止过度旋转
                 localizations.append(rotation_dropout(transformed, ratio=self.dropout_ratio))
 
         return F.concat(localizations, axis=0)
