@@ -58,7 +58,7 @@ LD_LIBRARY_PATH=:/usr/local/cuda-9.0/lib64:/usr/local/lib
 
 # 问题2：训练完第一轮后就卡住.... 
   解决办法：
-     在get_trainer的中去除  #epoch_evaluator, 可能是epoch_evaluator不停止对数据进行迭代，耗时过长
+     在get_trainer的中去除  #epoch_evaluator, 可能是epoch_evaluator不停止对数据进行迭代(eval数据集太大)，耗时过长
      trainer = get_trainer(
         net,
         updater,
