@@ -83,7 +83,8 @@ LD_LIBRARY_PATH=:/usr/local/cuda-9.0/lib64:/usr/local/lib
         ],
      )
 
-     
+# 问题3：训练中途停止当前进程，后台无法停止, 导致资源沾满，下次无法提交。。。。
+   
   
     
 
@@ -280,7 +281,7 @@ if __name__ == "__main__":
         'validation/main/loss',
         'validation/main/accuracy',
     ]
-
+    # 评估者最多只能运行200次迭代对验证集。这意味着如果验证设置有很多数据,可能会花费几个小时的时间来评估,你可以估计模型的评估者,因为它只评估模型的一小部分
     FastEvaluator = get_fast_evaluator((args.test_interval, 'iteration'))
     evaluator = (
         FastEvaluator(
@@ -295,6 +296,8 @@ if __name__ == "__main__":
     )
     epoch_validation_iterator = copy.copy(validation_iterator)
     epoch_validation_iterator._repeat = False
+
+    # 该评估器接受所有的验证图像，对每个图像进行评估，并报告所有验证图像的验证度量。
     epoch_evaluator = (
         chainer.training.extensions.Evaluator(
             epoch_validation_iterator,
@@ -337,7 +340,7 @@ if __name__ == "__main__":
         print_interval=args.log_interval,
         extra_extensions=(
             evaluator,
-            #epoch_evaluator,
+            epoch_evaluator,
             model_snapshotter,
             bbox_plotter,
             (curriculum, (args.test_interval, 'iteration')),
