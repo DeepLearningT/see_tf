@@ -163,8 +163,8 @@ def get_trainer(net, updater, log_dir, print_fields, extra_extensions=(), epochs
             log_report='Logger',
         ))
 
-    # Progressbar!!
-    trainer.extend(extensions.ProgressBar(update_interval=1))
+    # Progressbar!! 打印进度条
+    # trainer.extend(extensions.ProgressBar(update_interval=1))
 
     for extra_extension, trigger in extra_extensions:
         trainer.extend(extra_extension, trigger=trigger)
@@ -184,7 +184,7 @@ def add_default_arguments(parser):
     parser.add_argument('-ln', '--log-name', dest='log_name', default='training', help="name of the log folder")
     parser.add_argument('-lr', '--learning-rate', dest='learning_rate', type=float, default=0.01,
                         help="initial learning rate [default: 0.01]")
-    parser.add_argument('-li', '--log-interval', dest='log_interval', type=int, default=100,
+    parser.add_argument('-li', '--log-interval', dest='log_interval', type=int, default=10,
                         help="number of iterations after which an update shall be logged [default: 100]")
     parser.add_argument('--lr-step', dest='learning_rate_step_size', type=float, default=0.1,
                         help="Step size for decreasing learning rate [default: 0.1]")

@@ -56,8 +56,34 @@ LD_LIBRARY_PATH=:/usr/local/cuda-9.0/lib64:/usr/local/lib
        if param.data is None:
             continue
 
-# 问题2：不能进行多轮训练
+# 问题2：训练完第一轮后就卡住.... 
   解决办法：
+     在get_trainer的中去除  #epoch_evaluator, 可能是epoch_evaluator不停止对数据进行迭代，耗时过长
+     trainer = get_trainer(
+        net,
+        updater,
+        log_dir,
+        fields_to_print,
+        epochs=args.epochs,
+        snapshot_interval=args.snapshot_interval,
+        print_interval=args.log_interval,
+        extra_extensions=(
+            evaluator,
+            #epoch_evaluator,
+            model_snapshotter,
+            bbox_plotter,
+            (curriculum, (args.test_interval, 'iteration')),
+        ),
+        postprocess=log_postprocess,
+        do_logging=args.no_log,
+        model_files=[
+            get_definition_filepath(localization_net),
+            get_definition_filepath(recognition_net),
+            get_definition_filepath(net),
+        ],
+     )
+
+     
   
     
 
@@ -296,7 +322,7 @@ if __name__ == "__main__":
         send_bboxes=args.send_bboxes,
         upstream_port=args.port,
         visualization_anchors=[["localization_net", "vis_anchor"], ["recognition_net", "vis_anchor"]],
-        render_extracted_rois=False,
+        render_extrxacted_rois=False,
         invoke_before_training=True,
         render_intermediate_bboxes=args.render_all_bboxes,
     ), (10, 'iteration'))
@@ -311,7 +337,7 @@ if __name__ == "__main__":
         print_interval=args.log_interval,
         extra_extensions=(
             evaluator,
-            epoch_evaluator,
+            #epoch_evaluator,
             model_snapshotter,
             bbox_plotter,
             (curriculum, (args.test_interval, 'iteration')),
