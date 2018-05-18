@@ -25,7 +25,22 @@ from utils.train_utils import add_default_arguments, get_fast_evaluator, get_tra
 
 
 '''
+# 脚本后台启动
+##########################################################
+export PYTHON_ROOT=/opt/Python_3.6.0_gpu
+export PATH=${PYTHON_ROOT}/bin/:$PATH
+export LD_LIBRARY_PATH=:/usr/local/cuda-9.0/lib64:/usr/local/lib
 
+export project_path="/data/home/deeplearn/tensorflow-workspace/see_tf"
+
+
+cd ${project_path}/chainer
+
+nohup python3.6 -u ${project_path}/chainer/train_text_recognition.py --dataset_specification /data/home/deeplearn/dataset/SVHN/Format1/onedataset.json --log_dir /data/home/deeplearn/tensorflow-workspace/see_tf/logs -b 64 --char-map /data/home/deeplearn/tensorflow-workspace/see_tf/datasets/textrec/ctc_char_map.json -g 0 1 2 3 --blank-label 0 -e 20000 -si 100 --test-iterations 200 -t 20 &
+
+
+# IDA 远程启动
+###########################################################
 # 环境变量
 LD_LIBRARY_PATH=:/usr/local/cuda-9.0/lib64:/usr/local/lib
 
