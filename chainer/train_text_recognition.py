@@ -31,6 +31,7 @@ LD_LIBRARY_PATH=:/usr/local/cuda-9.0/lib64:/usr/local/lib
 
 # main 参数
 
+--dataset_specification
 /data/home/deeplearn/dataset/SVHN/Format1/onedataset.json
 --log_dir
 /data/home/deeplearn/tensorflow-workspace/see_tf/logs
@@ -40,12 +41,19 @@ LD_LIBRARY_PATH=:/usr/local/cuda-9.0/lib64:/usr/local/lib
 /data/home/deeplearn/tensorflow-workspace/see_tf/datasets/textrec/ctc_char_map.json
 -g
 0
+1
+2
+3
 --blank-label
 0
 -e
-100
+200
 -si
 100
+--test-iterations
+200
+-t
+20
 
 # 问题1：不支持多GPU训练
   解决办法：
