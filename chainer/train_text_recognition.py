@@ -59,32 +59,12 @@ LD_LIBRARY_PATH=:/usr/local/cuda-9.0/lib64:/usr/local/lib
 # 问题2：训练完第一轮后就卡住.... 
   解决办法：
      在get_trainer的中去除  #epoch_evaluator, 可能是epoch_evaluator不停止对数据进行迭代(eval数据集太大)，耗时过长
-     trainer = get_trainer(
-        net,
-        updater,
-        log_dir,
-        fields_to_print,
-        epochs=args.epochs,
-        snapshot_interval=args.snapshot_interval,
-        print_interval=args.log_interval,
-        extra_extensions=(
-            evaluator,
-            #epoch_evaluator,
-            model_snapshotter,
-            bbox_plotter,
-            (curriculum, (args.test_interval, 'iteration')),
-        ),
-        postprocess=log_postprocess,
-        do_logging=args.no_log,
-        model_files=[
-            get_definition_filepath(localization_net),
-            get_definition_filepath(recognition_net),
-            get_definition_filepath(net),
-        ],
-     )
+     调整参数
+     --test-iterations 200 -t 20  （可以显示日志 每20次迭代间隔评估一次fast_validation   每一次评估 循环200次）
+     
 
 # 问题3：训练中途停止当前进程，后台无法停止, 导致资源沾满，下次无法提交。。。。
-   
+  解决办法：等待。。
   
     
 
@@ -122,6 +102,7 @@ if __name__ == "__main__":
     parser.add_argument("--render-all-bboxes", action='store_true', default=False, help="bbox plotter also renders all intermediate bboxes")
     parser = add_default_arguments(parser)
     args = parser.parse_args()
+    print(args)
 
     image_size = Size(width=200, height=64)
     target_shape = Size(width=50, height=50)
@@ -340,7 +321,7 @@ if __name__ == "__main__":
         print_interval=args.log_interval,
         extra_extensions=(
             evaluator,
-            epoch_evaluator,
+            #epoch_evaluator,
             model_snapshotter,
             bbox_plotter,
             (curriculum, (args.test_interval, 'iteration')),
